@@ -12,3 +12,6 @@ def cli(hellow):
 def download():
     """Command for Download the Dataset"""
     ut.download_dataset()
+
+if __name__ == '__main__':
+    cli()
