@@ -1,8 +1,0 @@
-README.md
-app.py
-DaielChom.egg-info/PKG-INFO
-DaielChom.egg-info/SOURCES.txt
-DaielChom.egg-info/dependency_links.txt
-DaielChom.egg-info/entry_points.txt
-DaielChom.egg-info/requires.txt
-DaielChom.egg-info/top_level.txt
