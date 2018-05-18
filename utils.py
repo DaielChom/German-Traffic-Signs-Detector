@@ -2,6 +2,13 @@ import wget
 import shutil
 import zipfile
 import os
+import os
+from sklearn.linear_model import LogisticRegression
+from skimage import io
+import numpy as np
+import pandas as pd
+from PIL import Image
+from sklearn.externals import joblib
 
 def download_dataset():
     """Download and prepare dataset for training usaging kiwi Challenge structure of data"""
@@ -10,7 +17,7 @@ def download_dataset():
 
     # DOWNLOAD DATASET
     print("Downloading ...")
-    os.mkdir("./images")
+    os.mkdir("./images",0o777)
     url = "http://benchmark.ini.rub.de/Dataset_GTSDB/FullIJCNN2013.zip"
     wget.download(url, out=path_dataset)
 
@@ -66,8 +73,8 @@ def download_dataset():
 
     # PREPARE TRAIN AND TEST DIRECTORY
     print("\nPreparing train and test structure")
-    os.mkdir("./images/train")
-    os.mkdir("./images/test")
+    os.mkdir("./images/train/",0o777)
+    os.mkdir("./images/test/", 0o777)
 
     for tag in range(43):
         if tag < 10:
@@ -120,11 +127,53 @@ def download_dataset():
     # DELETE FILES
     shutil.rmtree(path_dataset[:-4])
 
+
+def get_RGB_flatten(img):
+    """Concatenate flatten channels of a image"""
+    image = np.array(img)
+    R = image[:,:,0].flatten()
+    G = image[:,:,1].flatten()
+    B = image[:,:,2].flatten()
+
+    return list(R)+list(G)+list(B)
+
+def get_all_images(PATH):
+    """Return a list with all image resized of a path especific"""
+    temp_list = []
+    maxsize = (128, 128)
+    dir_list = os.listdir(PATH)
+    for i in dir_list:
+        temp_list.append(Image.open(PATH+i).resize(maxsize, Image.ANTIALIAS))
+    return temp_list
+
 def logistic_regression_scikit_learn():
-    print("logistic_regression_scikit_learn")
+    """Train logistic regression with scikit-learn framework"""
+
+    print("Training ...")
+
+
+    PATH_TRAIN = "./images/train/"
+    train_image = get_all_images(PATH_TRAIN)
+
+    train_RGB = []
+    for i in train_image:
+        train_RGB.append(get_RGB_flatten(i))
+
+    target_train = pd.read_csv("images/target_train.csv")
+
+    train_y = []
+    for i in target_train.values:
+        train_y.append(i[1])
+
+    lg = LogisticRegression()
+    lg.fit(train_RGB,train_y)
+
+    print("Saving model ...")
+    joblib.dump(lg, './models/model1/saved/logistic-Regression-sckit-learn.pkl')
+
 
 def select_train_model(model_name):
-
+    """Switch between the different model"""
     if model_name == "LRSL":
         logistic_regression_scikit_learn()
 
