@@ -171,11 +171,40 @@ def logistic_regression_scikit_learn():
     print("Saving model ...")
     joblib.dump(lg, './models/model1/saved/logistic-Regression-sckit-learn.pkl')
 
+def TEST_logistic_regression_scikit_learn():
+    print("Testing ...")
+
+
+    PATH_TEST = "./images/test/"
+    test_image = get_all_images(PATH_TEST)
+
+    test_RGB = []
+    for i in test_image:
+        test_RGB.append(get_RGB_flatten(i))
+
+    target_test = pd.read_csv("images/target_test.csv")
+
+    test_y = []
+    for i in target_test.values:
+        test_y.append(i[1])
+
+    model_saved = joblib.load('./models/model1/saved/logistic-Regression-sckit-learn.pkl')
+    result = model_saved.score(test_RGB, test_y)
+    print("Score:",result)
 
 def select_train_model(model_name):
     """Switch between the different model"""
     if model_name == "LRSL":
         logistic_regression_scikit_learn()
+
+    else:
+        print("Model not found")
+
+def select_test_model(model_name):
+    """Switch between the different model"""
+
+    if model_name == "LRSL":
+        TEST_logistic_regression_scikit_learn()
 
     else:
         print("Model not found")
