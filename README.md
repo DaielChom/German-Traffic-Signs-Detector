@@ -5,5 +5,13 @@ This is a repository for implement a solution for [Kiwi Challenge](https://githu
 ## Usage
 
 1. Download and extract dataset
-	
-	$ python app.py download
+
+		$ python app.py download
+
+2. For train model
+
+		$ python app.py train -m LRSL -d ./images/train/
+
+3. For test model
+
+		$ python app.py test -m LRSL -d ./images/test/
