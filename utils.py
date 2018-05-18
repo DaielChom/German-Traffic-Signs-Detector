@@ -146,13 +146,13 @@ def get_all_images(PATH):
         temp_list.append(Image.open(PATH+i).resize(maxsize, Image.ANTIALIAS))
     return temp_list
 
-def logistic_regression_scikit_learn():
+def logistic_regression_scikit_learn(directory):
     """Train logistic regression with scikit-learn framework"""
 
     print("Training ...")
 
 
-    PATH_TRAIN = "./images/train/"
+    PATH_TRAIN = directory
     train_image = get_all_images(PATH_TRAIN)
 
     train_RGB = []
@@ -171,11 +171,11 @@ def logistic_regression_scikit_learn():
     print("Saving model ...")
     joblib.dump(lg, './models/model1/saved/logistic-Regression-sckit-learn.pkl')
 
-def TEST_logistic_regression_scikit_learn():
+def TEST_logistic_regression_scikit_learn(directory):
     print("Testing ...")
 
 
-    PATH_TEST = "./images/test/"
+    PATH_TEST = directory
     test_image = get_all_images(PATH_TEST)
 
     test_RGB = []
@@ -192,19 +192,19 @@ def TEST_logistic_regression_scikit_learn():
     result = model_saved.score(test_RGB, test_y)
     print("Score:",result)
 
-def select_train_model(model_name):
+def select_train_model(model_name, directory):
     """Switch between the different model"""
     if model_name == "LRSL":
-        logistic_regression_scikit_learn()
+        logistic_regression_scikit_learn(directory)
 
     else:
         print("Model not found")
 
-def select_test_model(model_name):
+def select_test_model(model_name, directory):
     """Switch between the different model"""
 
     if model_name == "LRSL":
-        TEST_logistic_regression_scikit_learn()
+        TEST_logistic_regression_scikit_learn(directory)
 
     else:
         print("Model not found")

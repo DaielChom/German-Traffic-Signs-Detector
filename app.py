@@ -15,22 +15,24 @@ def download():
 
 @cli.command()
 @click.option('--model', '-m', default = False, help=" Model to use for train \n1. Use 'LRSL' for logistic regression model using scikit-learn\n2.")
-def train(model):
+@click.option('--directory', '-d', default = False, help = "Directory with trainig data")
+def train(model, directory):
     """Train a model """
 
-    if model:
-        ut.select_train_model(model)
+    if model and directory:
+        ut.select_train_model(model, directory)
     else:
-        print("Model not select")
+        print("Options not select")
 
 @cli.command()
 @click.option('--model','-m', default = False, help=" Model to use for test \n1. Use 'LRSL' for logistic regression model using scikit-learn\n2.")
-def test(model):
+@click.option('--directory', '-d', default = False, help = "Directory with test data")
+def test(model, directory):
     """Test a model"""
-    if model:
-        ut.select_test_model(model)
+    if model and directory:
+        ut.select_test_model(model, directory)
     else:
-        print("Model not found")
+        print("Options not found")
 
 if __name__ == '__main__':
     cli()
