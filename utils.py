@@ -25,11 +25,11 @@ def download_dataset():
     os.remove(path_dataset)
 
     # DELETE OBJECT DETECTION IMAGE
-    print("\nDeleting object detection image ...")
-    list_dataset = os.listdir(path_dataset[:-4])
-    for file_name in list_dataset:
-        if ".ppm" in file_name:
-            os.remove(path_dataset[:-4]+"/"+file_name)
+    #print("\nDeleting object detection image ...")
+    #list_dataset = os.listdir(path_dataset[:-4])
+    #for file_name in list_dataset:
+    #    if ".ppm" in file_name:
+    #        os.remove(path_dataset[:-4]+"/"+file_name)
 
     # PREPARE CSV
     print("\nPreparing csv ...")
@@ -49,19 +49,19 @@ def download_dataset():
     os.rename(path_dataset[:-4]+"/class.csv","./images/class.csv")
 
     # Image Name and Tag csv
-    with open(path_dataset[:-4]+"/target.csv", "w") as target:
-        target.write("Img_num,classID\n")
-        for tag in range(43):
+    #with open(path_dataset[:-4]+"/target.csv", "w") as target:
+    #    target.write("Img_num,classID\n")
+    #    for tag in range(43):
 
-            if tag < 10:
-                tag = "0"+str(tag)
+    #        if tag < 10:
+    #            tag = "0"+str(tag)
 
-            images = os.listdir(path_dataset[:-4]+"/"+str(tag)+"/")
+    #        images = os.listdir(path_dataset[:-4]+"/"+str(tag)+"/")
 
-            for img in images:
-                target.write(str(img)+","+str(tag)+"\n")
-    target.close()
-    os.rename(path_dataset[:-4]+"/target.csv","./images/target.csv")
+    #        for img in images:
+    #            target.write(str(tag)+str(img)+","+str(tag)+"\n")
+    #target.close()
+    #os.rename(path_dataset[:-4]+"/target.csv","./images/target.csv")
 
 
     # PREPARE TRAIN AND TEST DIRECTORY
@@ -92,4 +92,41 @@ def download_dataset():
 
         for file_test in test_tag:
             os.rename(path_dataset[:-4]+"/"+str(tag)+"/"+file_test, "./images/test/"+str(tag)+file_test)
+
+    # TRAIN AND TEST TARGET CSV
+    PATH_TRAIN = "./images/train/"
+    PATH_TEST = "./images/test/"
+
+    # train target
+    with open("./images/target_train.csv", "w") as target_train:
+        target_train.write("imgName,classID\n")
+
+        images = os.listdir(PATH_TRAIN)
+
+        for img in images:
+            target_train.write(img+","+img[:2]+"\n")
+    target_train.close()
+
+    # test target
+    with open("./images/target_test.csv", "w") as target_test:
+        target_test.write("imgName,classID\n")
+
+        images = os.listdir(PATH_TEST)
+
+        for img in images:
+            target_test.write(img+","+img[:2]+"\n")
+    target_test.close()
+
+    # DELETE FILES
     shutil.rmtree(path_dataset[:-4])
+
+def logistic_regression_scikit_learn():
+    print("logistic_regression_scikit_learn")
+
+def select_train_model(model_name):
+
+    if model_name == "LRSL":
+        logistic_regression_scikit_learn()
+
+    else:
+        print("Model not found")

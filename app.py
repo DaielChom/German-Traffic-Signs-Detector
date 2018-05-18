@@ -10,8 +10,18 @@ def cli(hellow):
 @cli.command()
 #@click.option('--download', default = False, help="Downloda Dataset")
 def download():
-    """Command for Download the Dataset"""
+    """Download and prepare dataset for training usaging kiwi Challenge structure of data"""
     ut.download_dataset()
+
+@cli.command()
+@click.option('--model', '-m', default = False, help=" Model to use for train \n1. Use 'LRSL' for logistic regression model using scikit-learn\n2.")
+def train(model):
+    """Train a model """
+
+    if model:
+        ut.select_train_model(model)
+    else:
+        print("Model not select")
 
 if __name__ == '__main__':
     cli()
