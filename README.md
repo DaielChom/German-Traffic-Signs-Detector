@@ -15,3 +15,7 @@ This is a repository for implement a solution for [Kiwi Challenge](https://githu
 3. For test model
 
 		$ python app.py test -m LRSL -d ./images/test/
+
+4. For infer a image
+
+		$ python app.py infer -m LRSL -d ./images/test/0000003.ppm

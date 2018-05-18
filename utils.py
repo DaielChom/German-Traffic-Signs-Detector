@@ -31,13 +31,6 @@ def download_dataset():
     print("\nDeleting zip ...")
     os.remove(path_dataset)
 
-    # DELETE OBJECT DETECTION IMAGE
-    #print("\nDeleting object detection image ...")
-    #list_dataset = os.listdir(path_dataset[:-4])
-    #for file_name in list_dataset:
-    #    if ".ppm" in file_name:
-    #        os.remove(path_dataset[:-4]+"/"+file_name)
-
     # PREPARE CSV
     print("\nPreparing csv ...")
     lines = []
@@ -54,22 +47,6 @@ def download_dataset():
             classname.write(i.replace("=",",")+"\n")
     classname.close()
     os.rename(path_dataset[:-4]+"/class.csv","./images/class.csv")
-
-    # Image Name and Tag csv
-    #with open(path_dataset[:-4]+"/target.csv", "w") as target:
-    #    target.write("Img_num,classID\n")
-    #    for tag in range(43):
-
-    #        if tag < 10:
-    #            tag = "0"+str(tag)
-
-    #        images = os.listdir(path_dataset[:-4]+"/"+str(tag)+"/")
-
-    #        for img in images:
-    #            target.write(str(tag)+str(img)+","+str(tag)+"\n")
-    #target.close()
-    #os.rename(path_dataset[:-4]+"/target.csv","./images/target.csv")
-
 
     # PREPARE TRAIN AND TEST DIRECTORY
     print("\nPreparing train and test structure")
@@ -127,7 +104,6 @@ def download_dataset():
     # DELETE FILES
     shutil.rmtree(path_dataset[:-4])
 
-
 def get_RGB_flatten(img):
     """Concatenate flatten channels of a image"""
     image = np.array(img)
@@ -174,7 +150,6 @@ def logistic_regression_scikit_learn(directory):
 def TEST_logistic_regression_scikit_learn(directory):
     print("Testing ...")
 
-
     PATH_TEST = directory
     test_image = get_all_images(PATH_TEST)
 
@@ -192,6 +167,16 @@ def TEST_logistic_regression_scikit_learn(directory):
     result = model_saved.score(test_RGB, test_y)
     print("Score:",result)
 
+def INFER_logistic_regression_scikit_learn(img):
+
+    maxsize = (128, 128)
+
+    to_infer = get_RGB_flatten(Image.open(img).resize(maxsize, Image.ANTIALIAS))
+    model_saved = joblib.load('./models/model1/saved/logistic-Regression-sckit-learn.pkl')
+    result = model_saved.predict(np.array(to_infer).reshape(-1,len(to_infer)))
+    print("Class:",result)
+
+
 def select_train_model(model_name, directory):
     """Switch between the different model"""
     if model_name == "LRSL":
@@ -205,6 +190,15 @@ def select_test_model(model_name, directory):
 
     if model_name == "LRSL":
         TEST_logistic_regression_scikit_learn(directory)
+
+    else:
+        print("Model not found")
+
+def select_infer_model(model_name, directory):
+    """Infer between the different model"""
+
+    if model_name == "LRSL":
+        INFER_logistic_regression_scikit_learn(directory)
 
     else:
         print("Model not found")

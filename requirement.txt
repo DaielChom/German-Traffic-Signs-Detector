@@ -1,2 +1,10 @@
 click
 wget
+shutil
+zipfile
+os
+sklearn
+skimage
+numpy
+pandas
+PIL
